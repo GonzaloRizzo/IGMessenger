@@ -1,0 +1,187 @@
+{
+  "name": "igmessenger",
+  "productName": "IG Messenger",
+  "version": "0.0.1",
+  "description": "Desktop client for Instagram Direct Messages",
+  "scripts": {
+    "build": "concurrently \"yarn build-main\" \"yarn build-renderer\"",
+    "build-dev-dll": "cross-env NODE_ENV=development webpack --config ./configs/webpack.config.renderer.dev.dll.babel.js --colors",
+    "build-main": "cross-env NODE_ENV=production webpack --config ./configs/webpack.config.main.prod.babel.js --colors",
+    "build-renderer": "cross-env NODE_ENV=production webpack --config ./configs/webpack.config.renderer.prod.babel.js --colors",
+    "lint": "cross-env NODE_ENV=development eslint --cache --format=pretty .",
+    "lint-fix": "yarn --silent lint --fix; exit 0",
+    "package": "yarn build && electron-builder build",
+    "package-all": "yarn build && electron-builder build -mwl",
+    "package-linux": "yarn build && electron-builder build --linux",
+    "package-win": "yarn build && electron-builder build --win --x64",
+    "package-mac": "yarn build && electron-builder build --mac --x64",
+    "prestart": "yarn build",
+    "start": "cross-env NODE_ENV=production electron ./app/main.prod.js",
+    "start-main-dev": "cross-env NODE_ENV=development electron -r @babel/register ./app/main.dev.js",
+    "start-renderer-dev": "cross-env NODE_ENV=development webpack-dev-server --config configs/webpack.config.renderer.dev.babel.js",
+    "test": "cross-env NODE_ENV=test BABEL_DISABLE_CACHE=1 jest",
+    "test-all": "yarn lint && yarn build && yarn test",
+    "test-watch": "yarn test --watch"
+  },
+  "lint-staged": {
+    "*.{js,jsx}": [
+      "cross-env NODE_ENV=development eslint --cache --format=pretty",
+      "git add --patch"
+    ],
+    "{*.json}": [
+      "prettier --parser json --write",
+      "git add --patch"
+    ],
+    "*.{css,scss}": [
+      "prettier --single-quote --write",
+      "git add --patch"
+    ],
+    "*.{html,md,yml}": [
+      "prettier --single-quote --write",
+      "git add --patch"
+    ]
+  },
+  "main": "./app/main.prod.js",
+  "build": {
+    "productName": "IG Messenger",
+    "appId": "com.gonzalorizzo.IGMessenger",
+    "files": [
+      "app/app.html",
+      "app/main.prod.js",
+      "app/main.prod.js.map",
+      "app/renderer.prod.js",
+      "app/renderer.prod.js.map",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        "nsis",
+        "msi"
+      ]
+    },
+    "linux": {
+      "target": [
+        "deb",
+        "rpm",
+        "snap",
+        "AppImage"
+      ],
+      "category": "Network"
+    },
+    "directories": {
+      "buildResources": "resources",
+      "output": "release"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GonzaloRizzo/IGMessenger.git"
+  },
+  "author": "Gonzalo Rizzo <me@gonzalorizzo.com>",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/GonzaloRizzo/IGMessenger /issues"
+  },
+  "keywords": [
+    "electron",
+    "react",
+    "instagram",
+    "messenger"
+  ],
+  "homepage": "https://github.com/GonzaloRizzo/IGMessenger",
+  "jest": {
+    "testURL": "http://localhost/",
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|svg)$": "<rootDir>/internals/mocks/fileMock.js"
+    },
+    "moduleFileExtensions": [
+      "js",
+      "jsx",
+      "json"
+    ],
+    "transform": {
+      "^.+\\.jsx?$": "babel-jest"
+    }
+  },
+  "devDependencies": {
+    "@babel/core": "^7.4.0",
+    "@babel/plugin-proposal-class-properties": "^7.4.0",
+    "@babel/plugin-proposal-decorators": "^7.4.0",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.2.0",
+    "@babel/plugin-proposal-optional-chaining": "^7.2.0",
+    "@babel/plugin-transform-react-constant-elements": "^7.2.0",
+    "@babel/preset-env": "^7.4.2",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/register": "^7.4.0",
+    "babel-core": "7.0.0-bridge.0",
+    "babel-eslint": "^10.0.1",
+    "babel-jest": "^24.5.0",
+    "babel-loader": "^8.0.5",
+    "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
+    "chalk": "^2.4.2",
+    "concurrently": "^4.1.0",
+    "cross-env": "^5.2.0",
+    "css-loader": "^2.1.1",
+    "electron": "^4.1.3",
+    "electron-builder": "^20.39.0",
+    "electron-devtools-installer": "^2.2.4",
+    "enzyme": "^3.9.0",
+    "enzyme-adapter-react-16": "^1.11.2",
+    "enzyme-to-json": "^3.3.5",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-config-prettier": "^4.1.0",
+    "eslint-formatter-pretty": "^2.1.1",
+    "eslint-import-resolver-webpack": "^0.11.0",
+    "eslint-plugin-compat": "^3.1.0",
+    "eslint-plugin-import": "^2.17.2",
+    "eslint-plugin-jsx-a11y": "6.2.1",
+    "eslint-plugin-prettier": "^3.0.1",
+    "eslint-plugin-promise": "^4.1.1",
+    "eslint-plugin-react": "^7.12.4",
+    "file-loader": "^3.0.1",
+    "husky": "^1.3.1",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^24.5.0",
+    "lint-staged": "^8.1.5",
+    "mini-css-extract-plugin": "^0.5.0",
+    "node-sass": "^4.11.0",
+    "optimize-css-assets-webpack-plugin": "^5.0.1",
+    "prettier": "^1.16.4",
+    "react-test-renderer": "^16.8.6",
+    "rimraf": "^2.6.3",
+    "sass-loader": "^7.1.0",
+    "style-loader": "^0.23.1",
+    "terser-webpack-plugin": "^1.2.3",
+    "url-loader": "^1.1.2",
+    "webpack": "^4.29.6",
+    "webpack-bundle-analyzer": "^3.1.0",
+    "webpack-cli": "^3.3.0",
+    "webpack-dev-server": "^3.2.1",
+    "webpack-merge": "^4.2.1",
+    "yarn": "^1.15.2"
+  },
+  "dependencies": {
+    "core-js": "3",
+    "devtron": "^1.4.0",
+    "electron-better-ipc": "^0.3.0",
+    "electron-debug": "^2.1.0",
+    "electron-log": "^3.0.4",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-hot-loader": "^4.8.2",
+    "react-router": "^5.0.0",
+    "react-router-dom": "^5.0.0",
+    "source-map-support": "^0.5.11"
+  },
+  "devEngines": {
+    "node": ">=11.x",
+    "yarn": ">=0.21.3"
+  },
+  "browserslist": "electron 1.6",
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  }
+}
