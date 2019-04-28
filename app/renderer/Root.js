@@ -1,14 +1,21 @@
-import React from 'react';
+import 'sanitize.css'
+
+import React from 'react'
 import { BrowserRouter } from 'react-router-dom'
-import { Switch, Route } from 'react-router';
+import { Switch, Route } from 'react-router'
+
+import ChatList from './views/ChatList'
+import GlobalStyle from './globalStyles'
 
 const Root = () => (
-  <BrowserRouter >
-    <Switch>
-      <Route path="/" render={()=>"Hello World"}/>
-    </Switch>
-  </BrowserRouter>
-);
-
+  <React.Fragment>
+    <GlobalStyle />
+    <BrowserRouter>
+      <Switch>
+        <Route path='/' component={ChatList} />
+      </Switch>
+    </BrowserRouter>
+  </React.Fragment>
+)
 
 export default Root

@@ -172,7 +172,9 @@
     "react-hot-loader": "^4.8.2",
     "react-router": "^5.0.0",
     "react-router-dom": "^5.0.0",
-    "source-map-support": "^0.5.11"
+    "sanitize.css": "^8.0.0",
+    "source-map-support": "^0.5.11",
+    "styled-components": "^4.2.0"
   },
   "devEngines": {
     "node": ">=11.x",
