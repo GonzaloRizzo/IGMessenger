@@ -1,9 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
 
-const ChatItem = ({ name, lastMessage, photo }) => {
+
+const ChatItem = ({ name, lastMessage, photo, onClick }) => {
   return (
-    <ChatItem.Container>
+    <ChatItem.Container onClick={onClick}>
       <ChatItem.Photo draggable='false' src={photo} />
       <ChatItem.Content>
         <ChatItem.MainInfo>{name}</ChatItem.MainInfo>
@@ -21,6 +22,7 @@ ChatItem.Container = styled.div`
   align-items: center;
   padding: 8px;
   user-select: none;
+  flex-shrink: 0;
 
   &:hover {
     background-color: #f7f7f7;

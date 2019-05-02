@@ -1,20 +1,35 @@
 import 'sanitize.css'
 
 import React from 'react'
-import { BrowserRouter } from 'react-router-dom'
+import { HashRouter } from 'react-router-dom'
 import { Switch, Route } from 'react-router'
+import StateProvider from './components/StateProvider'
 
 import ChatList from './views/ChatList'
+import Chat from './views/Chat'
 import GlobalStyle from './globalStyles'
 
 const Root = () => (
   <React.Fragment>
     <GlobalStyle />
-    <BrowserRouter>
+    <HashRouter>
       <Switch>
-        <Route path='/' component={ChatList} />
+        <Route
+          exact
+          path='/'
+          render={() => (
+            <StateProvider injected={injected => <ChatList {...injected} />} />
+          )}
+        />
+        <Route
+          exact
+          path='/thread/:threadId/'
+          render={() => (
+            <StateProvider injected={injected => <Chat {...injected} />} />
+          )}
+        />
       </Switch>
-    </BrowserRouter>
+    </HashRouter>
   </React.Fragment>
 )
 
