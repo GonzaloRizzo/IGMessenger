@@ -12,6 +12,10 @@ const GlobalStyle = createGlobalStyle`
   *, *:before, *:after {
     box-sizing: inherit;
   }
+  a {
+    color: inherit;
+    text-decoration: inherit;
+  }
 `
 
 export default GlobalStyle

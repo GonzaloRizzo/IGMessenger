@@ -13,7 +13,7 @@ const Container = styled.div`
 const Chat = ({ messages, currentUserId }) => {
   return (
     <Container>
-      {messages.map(message => (
+      {messages.filter(m => m.item_type !== 'action_log').map(message => (
         <MessageItem
           key={message.item_id}
           sentByCurrentUser={message.user_id === currentUserId}

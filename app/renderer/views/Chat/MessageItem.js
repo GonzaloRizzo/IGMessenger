@@ -1,6 +1,8 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 
+import MediaShareMessage from './MediaShareMessage'
+
 const ChatItem = props => {
   const { item_type, sentByCurrentUser } = props
   const Component =
@@ -17,11 +19,13 @@ const ChatItem = props => {
 ChatItem.DebugMessage = ({ item_type }) => <b>{item_type}</b>
 ChatItem.TextMessage = ({ text }) => text
 ChatItem.ActionLogMessage = ({ action_log: { description } }) => description
+ChatItem.MediaShareMessage = MediaShareMessage
 
 ChatItem.messageComponents = {
   debug: ChatItem.DebugMessage,
   text: ChatItem.TextMessage,
-  action_log: ChatItem.ActionLogMessage
+  action_log: ChatItem.ActionLogMessage,
+  media_share: ChatItem.MediaShareMessage
 }
 
 ChatItem.Container = styled.div`
