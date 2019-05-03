@@ -1,11 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
+import UserPhoto from '../../components/UserPhoto'
 
 
 const ChatItem = ({ name, lastMessage, photo, onClick }) => {
   return (
     <ChatItem.Container onClick={onClick}>
-      <ChatItem.Photo draggable='false' src={photo} />
+      <ChatItem.Photo src={photo} />
       <ChatItem.Content>
         <ChatItem.MainInfo>{name}</ChatItem.MainInfo>
         <ChatItem.ExtraInfo>{lastMessage}</ChatItem.ExtraInfo>
@@ -30,11 +31,9 @@ ChatItem.Container = styled.div`
   }
 `
 
-ChatItem.Photo = styled.img`
-  display: flex;
-  border-radius: 50%;
-  height: 50px;
-  width: 50px;
+ChatItem.Photo = styled(UserPhoto).attrs({
+  size: '50px'
+})`
   margin-right: 8px;
 `
 
