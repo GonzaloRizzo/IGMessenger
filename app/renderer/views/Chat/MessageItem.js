@@ -1,39 +1,49 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
-const ChatItem = message => {
-  const Component = ChatItem.messageComponents[message.item_type] || ChatItem.messageComponents.debug
+const ChatItem = props => {
+  const { item_type, sentByCurrentUser } = props
+  const Component =
+    ChatItem.messageComponents[item_type] || ChatItem.messageComponents.debug
   return (
-    <ChatItem.Container>
-      <Component {...message} />
+    <ChatItem.Container
+      sentByCurrentUser={sentByCurrentUser}
+    >
+      <Component {...props} />
     </ChatItem.Container>
   )
 }
 
 ChatItem.DebugMessage = ({ item_type }) => <b>{item_type}</b>
 ChatItem.TextMessage = ({ text }) => text
-ChatItem.ActionLogMessage = ({ action_log: { description }}) => description
+ChatItem.ActionLogMessage = ({ action_log: { description } }) => description
 
 ChatItem.messageComponents = {
   debug: ChatItem.DebugMessage,
   text: ChatItem.TextMessage,
-  action_log: ChatItem.ActionLogMessage,
+  action_log: ChatItem.ActionLogMessage
 }
 
 ChatItem.Container = styled.div`
-  display: flex;
   flex-direction: row;
-  height: 40px;
-  border-bottom: 1px solid #efefef;
-  align-items: center;
-  padding: 8px;
-  user-select: none;
-  flex-shrink:0;
+  border: 1px solid #efefef;
+  border-radius: 20px;
+  padding: 10px 12px;
+  margin: 5px;
+  max-width: 500px;
 
-  &:hover {
-    background-color: #f7f7f7;
-    cursor: pointer;
-  }
+  ${props =>
+    props.sentByCurrentUser
+      ? css`
+          align-self: flex-end;
+          background-color: #efefef;
+          margin-left: 25px;
+        `
+      : css`
+          margin-right: 25px;
+          background-color: white;
+          align-self: flex-start;
+        `}
 `
 
 export default ChatItem

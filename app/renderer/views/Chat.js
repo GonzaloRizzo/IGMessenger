@@ -7,13 +7,18 @@ const Container = styled.div`
   flex-direction: column;
   overflow-y: auto;
   width: 100%;
+  padding: 0 15px;
 `;
 
-const Chat = ({ messages }) => {
+const Chat = ({ messages, currentUserId }) => {
   return (
     <Container>
       {messages.map(message => (
-        <MessageItem key={message.item_id} {...message} />
+        <MessageItem
+          key={message.item_id}
+          sentByCurrentUser={message.user_id === currentUserId}
+          {...message}
+        />
       ))}
     </Container>
   );
@@ -23,7 +28,13 @@ const HeaderContainer = styled.div`
   width: 100%;
 `;
 
-const ChatContainers = ({ messages, onHomeClick, onGetMoreMessages, onLogin }) => {
+const ChatContainers = ({
+  messages,
+  user,
+  onHomeClick,
+  onGetMoreMessages,
+  onLogin
+}) => {
   return (
     <>
       <HeaderContainer>
@@ -40,7 +51,7 @@ const ChatContainers = ({ messages, onHomeClick, onGetMoreMessages, onLogin }) =
         </button>
       </HeaderContainer>
 
-      <Chat messages={messages} />
+      <Chat messages={messages} currentUserId={user.pk} />
     </>
   );
 };
