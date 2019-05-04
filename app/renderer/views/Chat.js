@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
+import useReactRouter from "use-react-router";
 import MessageItem from "./Chat/MessageItem";
+import { useIGMState } from "../context/IGMState";
 
 const Container = styled.div`
   display: flex;
@@ -13,13 +15,15 @@ const Container = styled.div`
 const Chat = ({ messages, currentUserId }) => {
   return (
     <Container>
-      {messages.filter(m => m.item_type !== 'action_log').map(message => (
-        <MessageItem
-          key={message.item_id}
-          sentByCurrentUser={message.user_id === currentUserId}
-          {...message}
-        />
-      ))}
+      {messages
+        .filter(m => m.item_type !== "action_log")
+        .map(message => (
+          <MessageItem
+            key={message.item_id}
+            sentByCurrentUser={message.user_id === currentUserId}
+            {...message}
+          />
+        ))}
     </Container>
   );
 };
@@ -28,13 +32,32 @@ const HeaderContainer = styled.div`
   width: 100%;
 `;
 
-const ChatContainers = ({
-  messages,
-  user,
-  onHomeClick,
-  onGetMoreMessages,
-  onLogin
-}) => {
+const useCurrentThreadId = threadId => {
+  const { setCurrentThread } = useIGMState();
+
+  React.useEffect(() => {
+    setCurrentThread(threadId);
+    return () => {
+      if (!threadId) {
+        setCurrentThread(threadId);
+      }
+    };
+  }, [threadId]);
+};
+
+const ChatContainers = () => {
+  const {
+    messages,
+    user,
+    onHomeClick,
+    onGetMoreMessages,
+    onLogin
+  } = useIGMState();
+  const { match } = useReactRouter();
+  const { threadId } = match.params;
+
+  useCurrentThreadId(threadId);
+
   return (
     <>
       <HeaderContainer>

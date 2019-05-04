@@ -6,6 +6,8 @@ import { log } from '../../utils'
 
 window.client = api.client
 
+export const IGMState = React.createContext({})
+
 const useAppendableList = init => {
   const [list, setList] = React.useState(init || [])
   const appendList = newValues => setList([...list, ...newValues])
@@ -13,7 +15,7 @@ const useAppendableList = init => {
   return [list, setList, appendList]
 }
 
-const useFeed = (feed) => {
+const useFeed = feed => {
   const [items, setItems, appendItems] = useAppendableList()
 
   React.useEffect(() => setItems([]), [feed])
@@ -44,7 +46,7 @@ const useDirectThread = threadId => {
   const [feed, setFeed] = React.useState(null)
 
   React.useEffect(() => {
-    log("New feed detected")
+    log('New feed detected')
     setFeed(
       api.client.feed.directThread({
         thread_id: threadId
@@ -65,18 +67,18 @@ const useInboxThread = () => {
   return useFeed(feed)
 }
 
-const StateProvider = ({ injected }) => {
-  const { history, match } = useReactRouter()
+export const StateProvider = ({ children }) => {
+  const { history } = useReactRouter()
   const [threads, getMoreThreads] = useInboxThread()
-  const [messages, getMoreMessages] = useDirectThread(match.params.threadId)
+  const [currentThread, setCurrentThread] = React.useState(null)
+  const [messages, getMoreMessages] = useDirectThread(currentThread)
   const [user, setUser] = React.useState(null)
 
-  window.threads = threads
-  window.user = user
-  window.messages = messages
-
   const handleLogin = async () => {
-    const newUser = await api.login(process.env.IG_USERNAME, process.env.IG_PASSWORD)
+    const newUser = await api.login(
+      process.env.IG_USERNAME,
+      process.env.IG_PASSWORD
+    )
     log('Did login')
     setUser(newUser)
   }
@@ -89,17 +91,25 @@ const StateProvider = ({ injected }) => {
 
   const handleHomeClick = () => history.push('/')
 
-  return injected({
+  const state = {
     threads,
     user,
     messages,
+    currentThread,
+    setCurrentThread,
     onGetMoreMessages: getMoreMessages,
     onLogin: handleLogin,
     onGetChats: getMoreThreads,
     onGetMoreThreads: getMoreThreads,
     onThreadClick: handleThreadClick,
     onHomeClick: handleHomeClick
-  })
+  }
+
+  window.state = state
+
+  return <IGMState.Provider value={state}>{children}</IGMState.Provider>
 }
 
-export default StateProvider
+export const useIGMState = () => React.useContext(IGMState)
+
+export default IGMState

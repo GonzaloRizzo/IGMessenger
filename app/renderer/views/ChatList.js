@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import ChatItem from "./ChatList/ChatItem";
+import { useIGMState } from "../context/IGMState";
 
 const Container = styled.div`
   display: flex;
@@ -37,7 +38,14 @@ const HeaderContainer = styled.div`
   width: 100%;
 `;
 
-const ChatListContainer = ({ threads, onLogin, onGetChats, onThreadClick }) => {
+const ChatListContainer = () => {
+  const {
+    threads,
+    onLogin,
+    onGetChats,
+    onThreadClick,
+  } = useIGMState()
+
   return (
     <>
       <HeaderContainer>

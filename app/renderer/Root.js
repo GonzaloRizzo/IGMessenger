@@ -3,7 +3,8 @@ import 'sanitize.css'
 import React from 'react'
 import { HashRouter } from 'react-router-dom'
 import { Switch, Route } from 'react-router'
-import StateProvider from './components/StateProvider'
+import { StateProvider } from './context/IGMState'
+import ProtectedRoute from './components/ProtectedRoute'
 
 import ChatList from './views/ChatList'
 import Chat from './views/Chat'
@@ -13,22 +14,13 @@ const Root = () => (
   <React.Fragment>
     <GlobalStyle />
     <HashRouter>
-      <Switch>
-        <Route
-          exact
-          path='/'
-          render={() => (
-            <StateProvider injected={injected => <ChatList {...injected} />} />
-          )}
-        />
-        <Route
-          exact
-          path='/thread/:threadId/'
-          render={() => (
-            <StateProvider injected={injected => <Chat {...injected} />} />
-          )}
-        />
-      </Switch>
+      <StateProvider>
+        <Switch>
+          <Route exact path="/login" render={()=>"Y dale"}/>
+          <Route exact path='/' component={ChatList} />
+          <Route exact path='/thread/:threadId/' component={Chat} />
+        </Switch>
+      </StateProvider>
     </HashRouter>
   </React.Fragment>
 )
