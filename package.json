@@ -169,7 +169,7 @@
     "electron-better-ipc": "^0.3.0",
     "electron-debug": "^2.1.0",
     "electron-log": "^3.0.4",
-    "instagram-private-api": "^1.0.3",
+    "instagram-private-api": "^1.5.1",
     "query-string": "^6.5.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",

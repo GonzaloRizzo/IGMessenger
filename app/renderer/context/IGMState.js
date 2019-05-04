@@ -74,6 +74,10 @@ export const StateProvider = ({ children }) => {
   const [messages, getMoreMessages] = useDirectThread(currentThread)
   const [user, setUser] = React.useState(null)
 
+  React.useEffect(() => {
+    api.loadCookies()
+  })
+
   const handleLogin = async (username, password) => {
     const newUser = await api.login(username, password)
     log('Did login')
