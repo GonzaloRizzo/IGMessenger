@@ -163,12 +163,14 @@
     "yarn": "^1.15.2"
   },
   "dependencies": {
+    "@rehooks/input-value": "^1.0.0",
     "core-js": "3",
     "devtron": "^1.4.0",
     "electron-better-ipc": "^0.3.0",
     "electron-debug": "^2.1.0",
     "electron-log": "^3.0.4",
     "instagram-private-api": "^1.0.3",
+    "query-string": "^6.5.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-hot-loader": "^4.8.2",

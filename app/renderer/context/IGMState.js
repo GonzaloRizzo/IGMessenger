@@ -74,11 +74,8 @@ export const StateProvider = ({ children }) => {
   const [messages, getMoreMessages] = useDirectThread(currentThread)
   const [user, setUser] = React.useState(null)
 
-  const handleLogin = async () => {
-    const newUser = await api.login(
-      process.env.IG_USERNAME,
-      process.env.IG_PASSWORD
-    )
+  const handleLogin = async (username, password) => {
+    const newUser = await api.login(username, password)
     log('Did login')
     setUser(newUser)
   }

@@ -8,6 +8,7 @@ import ProtectedRoute from './components/ProtectedRoute'
 
 import ChatList from './views/ChatList'
 import Chat from './views/Chat'
+import Login from './views/Login'
 import GlobalStyle from './globalStyles'
 
 const Root = () => (
@@ -16,9 +17,9 @@ const Root = () => (
     <HashRouter>
       <StateProvider>
         <Switch>
-          <Route exact path="/login" render={()=>"Y dale"}/>
-          <Route exact path='/' component={ChatList} />
-          <Route exact path='/thread/:threadId/' component={Chat} />
+          <Route exact path="/login" component={Login}/>
+          <ProtectedRoute exact path='/' component={ChatList} />
+          <ProtectedRoute exact path='/thread/:threadId/' component={Chat} />
         </Switch>
       </StateProvider>
     </HashRouter>

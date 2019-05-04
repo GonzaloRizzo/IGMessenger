@@ -19,6 +19,7 @@
     "react/jsx-filename-extension": ["error", { "extensions": [".js", ".jsx"] }],
     "react/prop-types": "off",
     "no-unused-vars": ["error", { "argsIgnorePattern": "next" }],
-    "camelcase": "off"
+    "camelcase": "off",
+    "import/no-named-as-default": "off"
   }
 }
