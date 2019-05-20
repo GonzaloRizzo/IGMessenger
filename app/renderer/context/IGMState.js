@@ -3,6 +3,7 @@ import useReactRouter from 'use-react-router'
 
 import * as api from '../../services/instagram'
 import { log } from '../../utils'
+import useDirectThread from './IGMState/useDirectThread'
 
 window.client = api.client
 
@@ -39,24 +40,6 @@ const useFeed = feed => {
   return [items, getMore]
 }
 
-const useDirectThread = threadId => {
-  // TODO: reuse items from inbox thread.
-  // e.g. receive also threads as an argument and try to find threadId there
-
-  const [feed, setFeed] = React.useState(null)
-
-  React.useEffect(() => {
-    log('New feed detected')
-    setFeed(
-      api.client.feed.directThread({
-        thread_id: threadId
-      })
-    )
-  }, [threadId])
-
-  return useFeed(feed)
-}
-
 const useInboxThread = () => {
   const [feed, setFeed] = React.useState(null)
 
@@ -70,8 +53,7 @@ const useInboxThread = () => {
 export const StateProvider = ({ children }) => {
   const { history } = useReactRouter()
   const [threads, getMoreThreads] = useInboxThread()
-  const [currentThread, setCurrentThread] = React.useState(null)
-  const [messages, getMoreMessages] = useDirectThread(currentThread)
+  const [threadMessages, getMoreMessages] = useDirectThread()
   const [user, setUser] = React.useState(null)
 
   React.useEffect(() => {
@@ -95,9 +77,7 @@ export const StateProvider = ({ children }) => {
   const state = {
     threads,
     user,
-    messages,
-    currentThread,
-    setCurrentThread,
+    threadMessages,
     onGetMoreMessages: getMoreMessages,
     onLogin: handleLogin,
     onGetChats: getMoreThreads,

@@ -32,22 +32,9 @@ const HeaderContainer = styled.div`
   width: 100%;
 `;
 
-const useCurrentThreadId = threadId => {
-  const { setCurrentThread } = useIGMState();
-
-  React.useEffect(() => {
-    setCurrentThread(threadId);
-    return () => {
-      if (!threadId) {
-        setCurrentThread(threadId);
-      }
-    };
-  }, [threadId]);
-};
-
 const ChatContainers = () => {
   const {
-    messages,
+    threadMessages,
     user,
     onHomeClick,
     onGetMoreMessages,
@@ -55,8 +42,10 @@ const ChatContainers = () => {
   } = useIGMState();
   const { match } = useReactRouter();
   const { threadId } = match.params;
-
-  useCurrentThreadId(threadId);
+  
+  React.useEffect(()=>{
+    onGetMoreMessages(threadId)
+  }, [])
 
   return (
     <>
@@ -69,12 +58,12 @@ const ChatContainers = () => {
           Home
         </button>
 
-        <button type="button" onClick={onGetMoreMessages}>
+        <button type="button" onClick={()=>onGetMoreMessages(threadId)}>
           Get Messages
         </button>
       </HeaderContainer>
 
-      <Chat messages={messages} currentUserId={user.pk} />
+      <Chat messages={Object.values(threadMessages[threadId] || {})} currentUserId={user.pk} />
     </>
   );
 };
