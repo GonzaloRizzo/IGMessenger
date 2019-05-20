@@ -6,7 +6,7 @@ import { useIGMState } from "../context/IGMState";
 
 const Container = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   overflow-y: auto;
   width: 100%;
   padding: 0 15px;

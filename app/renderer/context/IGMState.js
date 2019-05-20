@@ -99,7 +99,7 @@ export const StateProvider = ({ children }) => {
     currentThread,
     setCurrentThread,
     onGetMoreMessages: getMoreMessages,
-    onLogin: () => handleLogin(),
+    onLogin: handleLogin,
     onGetChats: getMoreThreads,
     onGetMoreThreads: getMoreThreads,
     onThreadClick: handleThreadClick,
