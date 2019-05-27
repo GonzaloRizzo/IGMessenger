@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { keyBy, merge } from 'lodash-es'
+import { keyBy, merge } from 'lodash'
 import { plainToClassFromExist } from 'class-transformer';
 import * as api from '../../../services/instagram'
 
