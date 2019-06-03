@@ -1,70 +1,43 @@
-import React from "react";
-import styled from "styled-components";
-import useReactRouter from "use-react-router";
-import MessageItem from "./Chat/MessageItem";
-import { useIGMState } from "../context/IGMState";
+import React from 'react';
+import useReactRouter from 'use-react-router';
+import { useIGMState } from '../context/IGMState';
+import InfiniteFeed from '../components/InfiniteFeed';
+import MessageItem from './Chat/MessageItem';
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column-reverse;
-  overflow-y: auto;
-  width: 100%;
-  padding: 0 15px;
-`;
-
-const Chat = ({ messages, currentUserId }) => {
+const Chat = ({ loadMoreItems, messages, currentUserId }) => {
   return (
-    <Container>
-      {messages
-        .filter(m => m.item_type !== "action_log")
-        .map(message => (
-          <MessageItem
-            key={message.item_id}
-            sentByCurrentUser={message.user_id === currentUserId}
-            {...message}
-          />
-        ))}
-    </Container>
+    <InfiniteFeed
+      reversed
+      loadMoreItems={loadMoreItems}
+      itemCount={messages.length}
+      renderItem={({ ref, index }) => (
+        <MessageItem
+          ref={ref}
+          {...messages[index]}
+          sentByCurrentUser={messages[index].user_id === currentUserId}
+        />
+      )}
+    />
   );
 };
 
-const HeaderContainer = styled.div`
-  width: 100%;
-`;
-
 const ChatContainers = () => {
-  const {
-    threadMessages,
-    user,
-    onHomeClick,
-    onGetMoreMessages,
-    onLogin
-  } = useIGMState();
+  const { threadMessages, user, onGetMoreMessages } = useIGMState();
   const { match } = useReactRouter();
   const { threadId } = match.params;
-  
-  React.useEffect(()=>{
-    onGetMoreMessages(threadId)
-  }, [])
+
+  React.useEffect(() => {
+    onGetMoreMessages(threadId);
+  }, []);
 
   return (
-    <>
-      <HeaderContainer>
-        <button type="button" onClick={onLogin}>
-          Login
-        </button>
-
-        <button type="button" onClick={onHomeClick}>
-          Home
-        </button>
-
-        <button type="button" onClick={()=>onGetMoreMessages(threadId)}>
-          Get Messages
-        </button>
-      </HeaderContainer>
-
-      <Chat messages={Object.values(threadMessages[threadId] || {})} currentUserId={user.pk} />
-    </>
+    <Chat
+      loadMoreItems={() => onGetMoreMessages(threadId)}
+      messages={Object.values(threadMessages[threadId] || {}).filter(
+        m => m.item_type !== 'action_log'
+      )}
+      currentUserId={user.pk}
+    />
   );
 };
 

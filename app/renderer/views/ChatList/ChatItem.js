@@ -24,6 +24,7 @@ ChatItem.Container = styled.div`
   padding: 8px;
   user-select: none;
   flex-shrink: 0;
+  overflow: hidden;
 
   &:hover {
     background-color: #f7f7f7;

@@ -3,18 +3,19 @@ import styled, { css } from 'styled-components'
 
 import MediaShareMessage from './MediaShareMessage'
 
-const ChatItem = props => {
+const ChatItem = React.forwardRef((props, ref) => {
   const { item_type, sentByCurrentUser } = props
   const Component =
     ChatItem.messageComponents[item_type] || ChatItem.messageComponents.debug
   return (
     <ChatItem.Container
+      ref={ref}
       sentByCurrentUser={sentByCurrentUser}
     >
       <Component {...props} />
     </ChatItem.Container>
   )
-}
+})
 
 ChatItem.DebugMessage = ({ item_type }) => <b>{item_type}</b>
 ChatItem.TextMessage = ({ text }) => text

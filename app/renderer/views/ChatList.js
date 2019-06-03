@@ -34,33 +34,20 @@ const ChatList = ({ threads, onChatClick }) => {
   );
 };
 
-const HeaderContainer = styled.div`
-  width: 100%;
-`;
-
 const ChatListContainer = () => {
   const {
     threads,
-    onLogin,
     onGetChats,
     onThreadClick,
   } = useIGMState()
 
+  React.useEffect(() => {
+    onGetChats()
+  }, []);
+
+  // TODO: Rename chats to threads
   return (
-    <>
-      <HeaderContainer>
-        <button type="button" onClick={onLogin}>
-          Login
-        </button>
-
-        <button type="button" onClick={onGetChats}>
-          Get Chats
-        </button>
-      </HeaderContainer>
-
-      {/* TODO: Rename chats to threads */}
       <ChatList threads={threads} onChatClick={onThreadClick} />
-    </>
   );
 };
 
