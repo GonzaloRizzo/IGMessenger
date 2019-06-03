@@ -46,7 +46,6 @@ export default {
     }),
 
     new DotEnv({
-      safe: true
     }),
 
     new webpack.NamedModulesPlugin()

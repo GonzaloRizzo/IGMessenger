@@ -47,6 +47,8 @@
     "appId": "com.gonzalorizzo.IGMessenger",
     "files": [
       "app/app.html",
+      "app/style.css",
+      "app/style.css.map",
       "app/main.prod.js",
       "app/main.prod.js.map",
       "app/renderer.prod.js",
@@ -109,7 +111,6 @@
     "@babel/plugin-proposal-decorators": "^7.4.0",
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.2.0",
     "@babel/plugin-proposal-optional-chaining": "^7.2.0",
-    "@babel/plugin-transform-react-constant-elements": "^7.2.0",
     "@babel/preset-env": "^7.4.2",
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.4.0",
