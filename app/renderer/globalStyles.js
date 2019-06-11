@@ -15,6 +15,25 @@ const GlobalStyle = createGlobalStyle`
     color: inherit;
     text-decoration: inherit;
   }
+
+  ::-webkit-scrollbar-thumb {
+      background: #ccc;
+      border: 2px solid transparent;
+      background-clip: padding-box;
+  }
+  ::-webkit-scrollbar {
+      width: 8px;
+      background: transparent;  /* Optional: just make scrollbar invisible */
+  }
+  
+  button {
+    padding: 0;
+    border: none;
+    font: inherit;
+    color: inherit;
+    background-color: transparent;
+    cursor: pointer;
+  }
 `
 
 export default GlobalStyle
