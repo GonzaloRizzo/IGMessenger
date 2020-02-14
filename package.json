@@ -161,7 +161,7 @@
     "webpack-cli": "^3.3.0",
     "webpack-dev-server": "^3.2.1",
     "webpack-merge": "^4.2.1",
-    "yarn": "^1.15.2"
+    "yarn": "^1.22.0"
   },
   "dependencies": {
     "@rehooks/input-value": "^1.0.0",
