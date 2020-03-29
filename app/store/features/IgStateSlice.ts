@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { IgApiClient } from 'instagram-private-api';
+
+import igApi from '../services/igApi';
 
 interface DoLoginArgs {
   username: string;
@@ -9,11 +10,9 @@ interface DoLoginArgs {
 
 export const doLogin = createAsyncThunk(
   'igState/login',
-  async ({ username, password }: DoLoginArgs, thunkAPI) => {
-    const igClient = thunkAPI.extra.igClient as IgApiClient;
-
-    await igClient.state.generateDevice(username);
-    const res = await igClient.account.login(username, password);
+  async ({ username, password }: DoLoginArgs) => {
+    await igApi.state.generateDevice(username);
+    const res = await igApi.account.login(username, password);
     return res;
   }
 );

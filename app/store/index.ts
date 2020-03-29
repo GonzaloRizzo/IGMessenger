@@ -19,11 +19,7 @@ export type State = ReturnType<typeof rootReducer>;
 
 const store = configureRTKStore({
   reducer: rootReducer,
-  middleware: [
-    ...getDefaultMiddleware({ thunk: { extraArgument: { igClient } } }),
-    logger,
-    router
-  ] as const
+  middleware: [...getDefaultMiddleware(), logger, router] as const
 });
 
 igClient.request.end$.subscribe(async () => {
