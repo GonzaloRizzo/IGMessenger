@@ -12,8 +12,8 @@ export default function LoginPage() {
   return (
     <Formik
       initialValues={{
-        username: '',
-        password: '',
+        username: 'grizzo.exe',
+        password: '9YtVgTdnAM9kZV7r',
         rememberMe: false
       }}
       onSubmit={async ({ username, password }) => {

@@ -1,5 +1,5 @@
 import { IgApiClient } from 'instagram-private-api';
 
-const ig = new IgApiClient();
+const igApi = new IgApiClient();
 
-export default ig;
+export default igApi;

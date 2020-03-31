@@ -22,6 +22,14 @@ const store = configureRTKStore({
   middleware: [...getDefaultMiddleware(), logger, router] as const
 });
 
+if (process.env.NODE_ENV === 'development' && module.hot) {
+  module.hot.accept('./reducers', () => {
+    // eslint-disable-next-line global-require
+    const newCreateRootReducer = require('./reducers').default;
+    store.replaceReducer(newCreateRootReducer(history));
+  });
+}
+
 igClient.request.end$.subscribe(async () => {
   const serialized = await igClient.state.serialize();
   delete serialized.constants; // this deletes the version info, so you'll always use the version provided by the library

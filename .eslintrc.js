@@ -2,7 +2,9 @@ module.exports = {
   extends: 'erb/typescript',
   rules: {
     // A temporary hack related to IDE not resolving correct package.json
-    'import/no-extraneous-dependencies': 'off'
+    'import/no-extraneous-dependencies': 'off',
+    "import/no-unresolved": [2, { "ignore": ["RootTypes"] }],
+    "react/jsx-curly-newline": 0
   },
   settings: {
     'import/resolver': {
