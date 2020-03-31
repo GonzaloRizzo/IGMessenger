@@ -17,9 +17,25 @@ const router = routerMiddleware(history);
 
 export type State = ReturnType<typeof rootReducer>;
 
+const errorReporter = store => next => action => {
+  if (action.error && action.error.stack) {
+    // eslint-disable-next-line no-console
+    console.error(action.error.stack);
+  }
+  return next(action);
+};
+
 const store = configureRTKStore({
   reducer: rootReducer,
-  middleware: [...getDefaultMiddleware(), logger, router] as const
+  devTools: {
+    trace: true
+  },
+  middleware: [
+    errorReporter,
+    ...getDefaultMiddleware(),
+    logger,
+    router
+  ] as const
 });
 
 if (process.env.NODE_ENV === 'development' && module.hot) {
