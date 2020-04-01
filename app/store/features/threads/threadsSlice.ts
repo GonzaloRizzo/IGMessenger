@@ -70,5 +70,6 @@ export default reducer;
 
 export const {
   selectAll: selectAllThreads,
-  selectEntities: selectThreadEntities
+  selectEntities: selectThreadEntities,
+  selectById: selectThreadById
 } = threadsAdapter.getSelectors();
