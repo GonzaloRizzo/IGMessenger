@@ -6,6 +6,7 @@ import { useParams } from 'react-router';
 import {
   makeSelectMessagesByThreadId,
   fetchThreadMessages,
+  sendMessage,
   MessageItem
 } from '../store/features/messages/messagesSlice';
 import InfiniteFeed from '../components/InfiniteFeed';
@@ -26,6 +27,9 @@ export default function ThreadPage() {
   return (
     <div style={{ height: '80vh' }}>
       <h1>{threadId}</h1>
+      <MessageInput
+        onSend={text => dispatch(sendMessage({ threadId, text }))}
+      />
       <InfiniteFeed
         itemCount={messages.length}
         loadMoreItems={() => dispatch(fetchThreadMessages(threadId))}
@@ -47,3 +51,20 @@ const Message = React.forwardRef<any, MessageProps>(({ message }, ref) => (
     <b>{message.item_type}:</b> {message.text}
   </div>
 ));
+
+interface MessageInputProps {
+  onSend(text: string);
+}
+
+const MessageInput = ({ onSend }: MessageInputProps) => {
+  const [text, setText] = React.useState('');
+
+  return (
+    <input
+      type="text"
+      value={text}
+      onKeyDown={e => e.key === 'Enter' && onSend(text)}
+      onChange={e => setText(e.target.value)}
+    />
+  );
+};

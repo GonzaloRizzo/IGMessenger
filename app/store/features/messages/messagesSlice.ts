@@ -33,6 +33,17 @@ export const messageEntity = new schema.Entity<MessageItem>(
   }
 );
 
+interface SendMessageProps {
+  threadId: string;
+  text: string;
+}
+
+export const sendMessage = createAsyncThunk<any, SendMessageProps>(
+  'messages/sendMessage',
+  ({ threadId, text }) =>
+    igApi.entity.directThread(threadId).broadcastText(text)
+);
+
 export const fetchThreadMessages = createAsyncThunk(
   'messages/fetchThreadMessages',
   async (threadId: string, { getState }) => {
@@ -66,12 +77,14 @@ const messagesSlice = createSlice({
   }),
   reducers: {},
   extraReducers: builder =>
-    builder.addCase(fetchThreadMessages.fulfilled, (state, action) => {
-      const { messages, threadState } = action.payload;
-      const threadId = action.meta.arg;
-      messagesAdapter.upsertMany(state, messages);
-      state.threadState[threadId] = threadState;
-    })
+    builder
+      .addCase(fetchThreadMessages.fulfilled, (state, action) => {
+        const { messages, threadState } = action.payload;
+        const threadId = action.meta.arg;
+        messagesAdapter.upsertMany(state, messages);
+        state.threadState[threadId] = threadState;
+      })
+      .addCase(sendMessage.fulfilled, (state, action) => {})
 });
 
 export const { selectAll: selectAllMessages } = messagesAdapter.getSelectors(
