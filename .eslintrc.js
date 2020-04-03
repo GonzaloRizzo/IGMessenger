@@ -4,7 +4,11 @@ module.exports = {
     // A temporary hack related to IDE not resolving correct package.json
     'import/no-extraneous-dependencies': 'off',
     "import/no-unresolved": [2, { "ignore": ["RootTypes"] }],
-    "react/jsx-curly-newline": 0
+    "react/jsx-curly-newline": 0,
+    "react/prop-types": 0,
+    "@typescript-eslint/no-explicit-any": 0,
+    "@typescript-eslint/camelcase": 0,
+    "react/jsx-one-expression-per-line": 0,
   },
   settings: {
     'import/resolver': {

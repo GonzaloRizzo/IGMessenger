@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import routes from './constants/routes.json';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
+import ThreadPage from './pages/ThreadPage';
 import { selectIsLogged } from './store/features/IgStateSlice';
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
@@ -27,6 +28,7 @@ export default function Routes() {
     <Switch>
       <Route exact path={routes.LOGIN} component={LoginPage} />
       <PrivateRoute exact path={routes.HOME} component={HomePage} />
+      <PrivateRoute exact path={routes.THREAD} component={ThreadPage} />
     </Switch>
   );
 }

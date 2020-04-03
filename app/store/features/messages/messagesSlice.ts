@@ -4,7 +4,8 @@ import { schema, normalize } from 'normalizr';
 import {
   createSlice,
   createEntityAdapter,
-  createAsyncThunk
+  createAsyncThunk,
+  createSelector
 } from '@reduxjs/toolkit';
 import {
   DirectThreadFeedResponseItemsItem,
@@ -73,10 +74,15 @@ const messagesSlice = createSlice({
     })
 });
 
-export const selectMessagesByThreadId = (threadId: string) => (state: any) =>
-  Object.values(state.messages.entities).filter(
-    (e: MessageItem) => e.threadId === threadId
+export const { selectAll: selectAllMessages } = messagesAdapter.getSelectors(
+  (state: any) => state.messages
+);
+
+export const makeSelectMessagesByThreadId = (threadId: string) => {
+  return createSelector(selectAllMessages, messages =>
+    messages.filter(e => e.threadId === threadId)
   );
+};
 
 const { reducer } = messagesSlice;
 export default reducer;

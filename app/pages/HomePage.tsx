@@ -1,18 +1,14 @@
-/* eslint-disable react/prop-types */
 /* eslint-disable react/jsx-one-expression-per-line */
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'RootTypes';
+import { push } from 'connected-react-router';
 
 import {
   fetchThreads,
   selectAllThreads,
   ThreadItem
 } from '../store/features/threads/threadsSlice';
-import {
-  fetchThreadMessages,
-  selectMessagesByThreadId
-} from '../store/features/messages/messagesSlice';
 import InfiniteFeed from '../components/InfiniteFeed';
 
 export default function HomePage() {
@@ -33,7 +29,14 @@ export default function HomePage() {
           itemCount={threads.length}
           renderItem={({ ref, index }) =>
             threads[index] ? (
-              <UserButton ref={ref} key={index} thread={threads[index]} />
+              <UserButton
+                ref={ref}
+                key={index}
+                thread={threads[index]}
+                onClick={() => {
+                  dispatch(push(`/thread/${threads[index].thread_id}`));
+                }}
+              />
             ) : (
               <div ref={ref}>unknown</div>
             )
@@ -47,20 +50,17 @@ export default function HomePage() {
 
 interface UserButtonArgs {
   thread: ThreadItem;
+  onClick: (thread_id: string) => void;
 }
 // eslint-disable-next-line react/display-name, @typescript-eslint/no-explicit-any
-const UserButton = React.forwardRef<any, UserButtonArgs>(({ thread }, ref) => {
-  const dispatch = useDispatch();
-  const messages = useSelector(selectMessagesByThreadId(thread.thread_id));
-
-  return (
-    <div ref={ref} style={{ margin: '10px 0' }}>
-      <button
-        type="button"
-        onClick={() => dispatch(fetchThreadMessages(thread.thread_id))}
-      >
-        {thread.users[0].username}- [{messages.length}]
-      </button>
-    </div>
-  );
-});
+const UserButton = React.forwardRef<any, UserButtonArgs>(
+  ({ thread, onClick }, ref) => {
+    return (
+      <div ref={ref} style={{ margin: '10px 0' }}>
+        <button type="button" onClick={() => onClick(thread.thread_id)}>
+          {thread.users[0].username}
+        </button>
+      </div>
+    );
+  }
+);
