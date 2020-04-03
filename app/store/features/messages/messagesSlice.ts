@@ -38,24 +38,34 @@ interface SendMessageProps {
   text: string;
 }
 
-export const sendMessage = createAsyncThunk<any, SendMessageProps>(
-  'messages/sendMessage',
-  ({ threadId, text }) =>
-    igApi.entity.directThread(threadId).broadcastText(text)
-);
+interface FetchThreadMessagesProps {
+  threadId: string;
+  rewind?: boolean;
+}
 
 export const fetchThreadMessages = createAsyncThunk(
   'messages/fetchThreadMessages',
-  async (threadId: string, { getState }) => {
+  async (
+    { threadId, rewind = false }: FetchThreadMessagesProps,
+    { getState }
+  ) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const state = getState() as any;
     const threadEntities = state.threads.entities;
     const threadData = threadEntities[threadId];
-    const threadState = state.messages.threadState[threadId] || {};
 
-    const thread = igApi.feed.directThread(threadData);
-    const threadEntity = plainToClassFromExist(thread, threadState); // TODO: Add seq_id somehow;
-    const items = await threadEntity.items();
+    let thread;
+    if (rewind) {
+      thread = igApi.feed.directThread({
+        thread_id: threadData.thread_id,
+        oldest_cursor: undefined
+      });
+    } else {
+      const threadState = state.messages.threadState[threadId] || {};
+      thread = igApi.feed.directThread(threadData);
+      thread = plainToClassFromExist(thread, threadState); // TODO: Add seq_id somehow;
+    }
+    const items = await thread.items();
     const newItems = items.map(item => ({
       ...item,
       threadId
@@ -70,6 +80,14 @@ export const fetchThreadMessages = createAsyncThunk(
   }
 );
 
+export const sendMessage = createAsyncThunk<any, SendMessageProps>(
+  'messages/sendMessage',
+  async ({ threadId, text }, { dispatch }) => {
+    await igApi.entity.directThread(threadId).broadcastText(text);
+    await dispatch(fetchThreadMessages({ threadId, rewind: true }));
+  }
+);
+
 const messagesSlice = createSlice({
   name: 'messages',
   initialState: messagesAdapter.getInitialState({
@@ -79,8 +97,8 @@ const messagesSlice = createSlice({
   extraReducers: builder =>
     builder
       .addCase(fetchThreadMessages.fulfilled, (state, action) => {
-        const { messages, threadState } = action.payload;
-        const threadId = action.meta.arg;
+        const { messages = [], threadState } = action.payload;
+        const { threadId } = action.meta.arg;
         messagesAdapter.upsertMany(state, messages);
         state.threadState[threadId] = threadState;
       })

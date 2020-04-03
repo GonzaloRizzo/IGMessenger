@@ -21,7 +21,7 @@ export default function ThreadPage() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchThreadMessages(threadId));
+    dispatch(fetchThreadMessages({ threadId }));
   }, []);
 
   return (
@@ -32,7 +32,7 @@ export default function ThreadPage() {
       />
       <InfiniteFeed
         itemCount={messages.length}
-        loadMoreItems={() => dispatch(fetchThreadMessages(threadId))}
+        loadMoreItems={() => dispatch(fetchThreadMessages({ threadId }))}
         renderItem={({ index, ref }) => (
           <Message message={messages[index]} ref={ref} />
         )}
@@ -63,7 +63,7 @@ const MessageInput = ({ onSend }: MessageInputProps) => {
     <input
       type="text"
       value={text}
-      onKeyDown={e => e.key === 'Enter' && onSend(text)}
+      onKeyDown={e => e.key === 'Enter' && onSend(text).then(() => setText(''))}
       onChange={e => setText(e.target.value)}
     />
   );
