@@ -5,7 +5,7 @@ import {
 
 import { createHashHistory } from 'history';
 import { routerMiddleware } from 'connected-react-router';
-import logger from 'redux-logger';
+import { createLogger } from 'redux-logger';
 
 import createRootReducer from './reducers';
 import igClient from './services/igApi';
@@ -14,6 +14,10 @@ import { setState } from './features/IgStateSlice';
 const history = createHashHistory();
 const rootReducer = createRootReducer(history);
 const router = routerMiddleware(history);
+const logger = createLogger({
+  predicate: (_, action) => action.type !== 'igState/setState',
+  collapsed: true
+});
 
 export type State = ReturnType<typeof rootReducer>;
 
