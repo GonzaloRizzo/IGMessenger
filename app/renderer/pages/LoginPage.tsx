@@ -4,7 +4,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { useDispatch } from 'react-redux';
 import { push } from 'connected-react-router';
 
-import { doLogin } from '../store/features/IgStateSlice';
+import { doLogin } from '../../shared/store/features/IgStateSlice';
 
 export default function LoginPage() {
   const dispatch = useDispatch();
@@ -13,7 +13,7 @@ export default function LoginPage() {
     <Formik
       initialValues={{
         username: 'grizzo.exe',
-        password: '9YtVgTdnAM9kZV7r',
+        password: '',
         rememberMe: false
       }}
       onSubmit={async ({ username, password }) => {

@@ -8,7 +8,7 @@ import {
   fetchThreadMessages,
   sendMessage,
   MessageItem
-} from '../store/features/messages/messagesSlice';
+} from '../../shared/store/features/messages/messagesSlice';
 import InfiniteFeed from '../components/InfiniteFeed';
 
 export default function ThreadPage() {

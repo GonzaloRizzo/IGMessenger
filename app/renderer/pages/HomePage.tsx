@@ -8,7 +8,7 @@ import {
   fetchThreads,
   selectAllThreads,
   ThreadItem
-} from '../store/features/threads/threadsSlice';
+} from '../../shared/store/features/threads/threadsSlice';
 import InfiniteFeed from '../components/InfiniteFeed';
 
 export default function HomePage() {

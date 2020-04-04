@@ -4,11 +4,11 @@ import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-import routes from './constants/routes.json';
+import routes from '../shared/constants/routes.json';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import ThreadPage from './pages/ThreadPage';
-import { selectIsLogged } from './store/features/IgStateSlice';
+import { selectIsLogged } from '../shared/store/features/IgStateSlice';
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
   const isLogged = useSelector(selectIsLogged);

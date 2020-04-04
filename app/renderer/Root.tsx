@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import { History } from 'history';
 
 import Routes from './Routes';
-import { Store } from './store';
+import { Store } from '../shared/store';
 
 type Props = {
   store: Store;
