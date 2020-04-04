@@ -13,12 +13,15 @@ import InfiniteFeed from '../components/InfiniteFeed';
 
 export default function ThreadPage() {
   const { threadId } = useParams();
+
   const selectMessages = React.useMemo(
     () => makeSelectMessagesByThreadId(threadId),
     [threadId]
   );
-  const messages = useSelector(selectMessages);
+  const { messages, threadState } = useSelector(selectMessages);
+  const { moreAvailable, isLoading } = threadState;
   const dispatch = useDispatch();
+
 
   useEffect(() => {
     dispatch(fetchThreadMessages({ threadId }));
@@ -31,10 +34,16 @@ export default function ThreadPage() {
         onSend={text => dispatch(sendMessage({ threadId, text }))}
       />
       <InfiniteFeed
+        hasMoreItems={moreAvailable}
+        isLoadingItems={isLoading}
+        reversed
+        renderLoadingIndicator={() => 'loading'}
         itemCount={messages.length}
-        loadMoreItems={() => dispatch(fetchThreadMessages({ threadId }))}
+        loadMoreItems={async () => {
+          await dispatch(fetchThreadMessages({ threadId }));
+        }}
         renderItem={({ index, ref }) => (
-          <Message message={messages[index]} ref={ref} />
+          <Message index={index} message={messages[index]} ref={ref} />
         )}
       />
     </div>
@@ -43,14 +52,17 @@ export default function ThreadPage() {
 
 interface MessageProps {
   message: MessageItem;
+  index: number;
 }
 
 // eslint-disable-next-line react/display-name
-const Message = React.forwardRef<any, MessageProps>(({ message }, ref) => (
-  <div ref={ref}>
-    <b>{message.item_type}:</b> {message.text}
-  </div>
-));
+const Message = React.forwardRef<any, MessageProps>(
+  ({ message, index }, ref) => (
+    <div ref={ref}>
+      {index} - <b>{message.item_type}:</b> {message.text}
+    </div>
+  )
+);
 
 interface MessageInputProps {
   onSend(text: string);

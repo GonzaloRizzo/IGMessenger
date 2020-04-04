@@ -8,9 +8,12 @@ import { mergeRefs } from '../utils';
 
 export default function InfiniteFeed({
   loadMoreItems,
+  isLoadingItems,
+  hasMoreItems,
   itemCount,
   reversed = false,
-  renderItem
+  renderItem,
+  renderLoadingIndicator
 }) {
   const itemSizes = React.useRef({});
   const listRef = React.useRef();
@@ -26,13 +29,15 @@ export default function InfiniteFeed({
     }
   };
 
+  const isItemLoaded = index => !hasMoreItems || index < itemCount;
+
   return (
     <AutoSizer>
       {({ height, width }) => (
         <InfiniteLoader
-          isItemLoaded={index => index < itemCount}
-          itemCount={itemCount + 50}
-          loadMoreItems={loadMoreItems}
+          isItemLoaded={isItemLoaded}
+          itemCount={hasMoreItems ? itemCount + 1 : itemCount}
+          loadMoreItems={isLoadingItems ? () => {} : loadMoreItems}
         >
           {({ onItemsRendered, ref }) => (
             <List
@@ -52,7 +57,11 @@ export default function InfiniteFeed({
                     margin
                     onResize={resizeData => handleItemResize(index, resizeData)}
                   >
-                    {({ measureRef }) => renderItem({ ref: measureRef, index })}
+                    {({ measureRef }) =>
+                      isItemLoaded(index)
+                        ? renderItem({ ref: measureRef, index })
+                        : renderLoadingIndicator({ ref: measureRef, index })
+                    }
                   </Measure>
                 </div>
               )}

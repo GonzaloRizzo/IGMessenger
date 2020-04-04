@@ -88,19 +88,45 @@ export const sendMessage = createAsyncThunk<any, SendMessageProps>(
   }
 );
 
+interface ThreadState {
+  isLoading: boolean;
+  moreAvailable: boolean;
+  cursor?: string;
+}
+
 const messagesSlice = createSlice({
   name: 'messages',
-  initialState: messagesAdapter.getInitialState({
+  initialState: messagesAdapter.getInitialState<{
+    threadState: Record<string, ThreadState>;
+  }>({
     threadState: {}
   }),
   reducers: {},
   extraReducers: builder =>
     builder
+      .addCase(fetchThreadMessages.pending, (state, action) => {
+        const { threadId } = action.meta.arg;
+        if (!state.threadState[threadId]) {
+          state.threadState[threadId] = {
+            isLoading: true,
+            moreAvailable: true
+          };
+        } else {
+          state.threadState[threadId].isLoading = true;
+        }
+      })
       .addCase(fetchThreadMessages.fulfilled, (state, action) => {
         const { messages = [], threadState } = action.payload;
         const { threadId } = action.meta.arg;
+
         messagesAdapter.upsertMany(state, messages);
-        state.threadState[threadId] = threadState;
+
+        const { cursor, moreAvailable } = threadState;
+        state.threadState[threadId] = {
+          isLoading: false,
+          cursor,
+          moreAvailable
+        };
       })
       .addCase(sendMessage.fulfilled, (state, action) => {})
 });
@@ -110,8 +136,19 @@ export const { selectAll: selectAllMessages } = messagesAdapter.getSelectors(
 );
 
 export const makeSelectMessagesByThreadId = (threadId: string) => {
-  return createSelector(selectAllMessages, messages =>
-    messages.filter(e => e.threadId === threadId)
+  const selectThreadData = (state): ThreadState =>
+    state.messages.threadState?.[threadId] || {
+      isLoading: false,
+      moreAvailable: true
+    };
+
+  return createSelector(
+    selectAllMessages,
+    selectThreadData,
+    (messages, threadState) => ({
+      messages: messages.filter(e => e.threadId === threadId),
+      threadState
+    })
   );
 };
 
