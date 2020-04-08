@@ -56,7 +56,7 @@ interface UserButtonArgs {
 const UserButton = React.forwardRef<any, UserButtonArgs>(
   ({ thread, onClick }, ref) => {
     return (
-      <div ref={ref} style={{ margin: '10px 0' }}>
+      <div ref={ref} style={{ padding: '10px 0' }}>
         <button type="button" onClick={() => onClick(thread.thread_id)}>
           {thread.users[0].username}
         </button>

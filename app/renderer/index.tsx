@@ -4,6 +4,8 @@ import { AppContainer as ReactHotAppContainer } from 'react-hot-loader';
 import Root from './Root';
 import { history, store } from '../shared/store';
 
+import './app.global.css';
+
 const AppContainer = process.env.PLAIN_HMR ? Fragment : ReactHotAppContainer;
 
 document.addEventListener('DOMContentLoaded', () =>
