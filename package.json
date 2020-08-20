@@ -165,7 +165,7 @@
   },
   "dependencies": {
     "@rehooks/input-value": "^1.0.0",
-    "class-transformer": "^0.2.2",
+    "class-transformer": "^0.3.1",
     "core-js": "3",
     "devtron": "^1.4.0",
     "electron-better-ipc": "^0.3.0",
